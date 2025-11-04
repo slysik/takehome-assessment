@@ -211,10 +211,10 @@ function displayResults(response: QueryResponse, query: string) {
   }
 
   // Add download button for query results
-  const resultsHeader = document.querySelector('.results-header') as HTMLElement;
+  const resultsHeaderButtons = document.querySelector('.results-header-buttons') as HTMLElement;
 
   // Remove any existing download button
-  const existingDownload = resultsHeader.querySelector('.query-download-button');
+  const existingDownload = resultsHeaderButtons?.querySelector('.query-download-button');
   if (existingDownload) {
     existingDownload.remove();
   }
@@ -224,7 +224,6 @@ function displayResults(response: QueryResponse, query: string) {
   downloadButton.className = 'download-button query-download-button';
   downloadButton.textContent = 'Export';
   downloadButton.title = 'Export query results as CSV';
-  downloadButton.style.marginRight = '0.5rem';
   downloadButton.onclick = async () => {
     try {
       await api.exportQueryResults(response.sql);
@@ -234,9 +233,9 @@ function displayResults(response: QueryResponse, query: string) {
     }
   };
 
-  // Insert download button before Hide button
+  // Insert download button before Hide button in the button container
   const toggleButton = document.getElementById('toggle-results') as HTMLButtonElement;
-  toggleButton.parentNode?.insertBefore(downloadButton, toggleButton);
+  resultsHeaderButtons?.insertBefore(downloadButton, toggleButton);
 
   // Reset and re-initialize toggle button event listener
   const newToggleButton = toggleButton.cloneNode(true) as HTMLButtonElement;

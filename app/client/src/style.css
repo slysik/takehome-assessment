@@ -161,6 +161,12 @@ h2 {
   margin-bottom: 1rem;
 }
 
+.results-header-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .sql-display {
   background: #f8f9fa;
   border: 1px solid var(--border-color);
