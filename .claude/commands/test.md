@@ -41,19 +41,19 @@ TEST_COMMAND_TIMEOUT: 5 minutes
 
 1. **Python Syntax Check**
    - Preparation Command: None
-   - Command: `cd app/server && uv run python -m py_compile server.py main.py core/*.py`
+   - Command: `cd app/client && uv run python -m py_compile src/main.py src/llm_client.py src/agents/*.py src/workflow/*.py`
    - test_name: "python_syntax_check"
    - test_purpose: "Validates Python syntax by compiling source files to bytecode, catching syntax errors like missing colons, invalid indentation, or malformed statements"
 
 2. **Backend Code Quality Check**
    - Preparation Command: None
-   - Command: `cd app/server && uv run ruff check .`
+   - Command: `cd app/client && uv run ruff check src/`
    - test_name: "backend_linting"
    - test_purpose: "Validates Python code quality, identifies unused imports, style violations, and potential bugs"
 
 3. **All Backend Tests**
    - Preparation Command: None
-   - Command: `cd app/server && uv run pytest tests/ -v --tb=short`
+   - Command: `cd app/client && uv run pytest tests/ -v --tb=short`
    - test_name: "all_backend_tests"
    - test_purpose: "Validates all backend functionality including file processing, SQL security, LLM integration, and API endpoints"
 

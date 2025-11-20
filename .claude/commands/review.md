@@ -44,6 +44,7 @@ review_image_dir: `<absolute path to codebase>/agents/<adw_id>/<agent_name>/revi
   - IMPORTANT: Do not include any additional text, explanations, or markdown formatting
   - We'll immediately run JSON.parse() on the output, so make sure it's valid JSON
 - Ultra think as you work through the review process. Focus on the critical functionality paths and the user experience. Don't report issues if they are not critical to the feature.
+- For every image you take, be sure to read it in during the review process. 
 
 ## Setup
 
