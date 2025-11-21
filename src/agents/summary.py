@@ -49,7 +49,7 @@ class SummaryAgent(BaseAgent):
             sentiment_data = input_data.get("sentiment_analysis", input_data.get("sentiment_data", {}))
 
             # Generate summary
-            summary_data = self._generate_summary(financial_data, sentiment_data)
+            summary_data = self._generate_summary(input_data, financial_data, sentiment_data)
 
             return AgentResult(
                 agent_name=self.name,
@@ -66,11 +66,12 @@ class SummaryAgent(BaseAgent):
                 errors=[f"Summary generation error: {str(e)}"]
             )
 
-    def _generate_summary(self, financial_data: Dict[str, Any], sentiment_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_summary(self, input_data: Dict[str, Any], financial_data: Dict[str, Any], sentiment_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Generate executive summary from financial and sentiment data.
 
         Args:
+            input_data: Raw input data containing all agent outputs
             financial_data: Extracted financial metrics
             sentiment_data: Sentiment analysis results
 
@@ -84,13 +85,19 @@ class SummaryAgent(BaseAgent):
         net_income_yoy = financial_data.get("net_income", {}).get("yoy_change", 0)
         operating_margin = financial_data.get("operating_margin", {}).get("current", 0)
 
+        # Debug logging
+        logger.info(f"Summary agent - revenue_yoy={revenue_yoy}, operating_margin={operating_margin}")
+
+        # Extract sentiment
+        overall_sentiment = sentiment_data.get("overall_sentiment", "neutral")
+        logger.info(f"Summary agent - overall_sentiment={overall_sentiment}, revenue={revenue}, net_income={net_income}")
+
         # Extract segment performance (may be in input or combined with financial_data)
         segment_perf = input_data.get("segment_performance", financial_data.get("segment_performance", {}))
         cloud_revenue = segment_perf.get("cloud_services", {}).get("revenue", "N/A") if isinstance(segment_perf, dict) else "N/A"
         cloud_growth = segment_perf.get("cloud_services", {}).get("growth_rate", 0) if isinstance(segment_perf, dict) else 0
 
-        # Extract sentiment
-        overall_sentiment = sentiment_data.get("overall_sentiment", "neutral")
+        # Extract sentiment confidence
         sentiment_confidence = sentiment_data.get("confidence", 0.5)
 
         # Generate recommendation based on metrics and sentiment
