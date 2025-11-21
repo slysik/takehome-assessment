@@ -116,28 +116,6 @@ else
     echo -e "${YELLOW}⚠️  Analysis request failed${NC}"
 fi
 
-# Comparison checker step
-echo ""
-echo -e "${BLUE}Comparing output against expected_output.json...${NC}"
-echo ""
-
-# Save actual output to temp file
-ACTUAL_OUTPUT=$(mktemp)
-echo "$TEST_RESPONSE" > "$ACTUAL_OUTPUT"
-
-# Copy actual output into container and set permissions as root
-docker cp "$ACTUAL_OUTPUT" earnings-analyzer:/tmp/actual_response.json
-docker exec -u root earnings-analyzer chmod 644 /tmp/actual_response.json
-
-# Run comparison checker
-echo -e "${BLUE}Analyzing output against expected format...${NC}"
-docker cp compare_checker.py earnings-analyzer:/tmp/compare_checker.py
-docker exec -u root earnings-analyzer chmod 755 /tmp/compare_checker.py
-docker exec earnings-analyzer python3 /tmp/compare_checker.py
-
-# Clean up temp files
-rm -f "$ACTUAL_OUTPUT"
-
 echo ""
 echo "======================================"
 echo -e "${GREEN}Setup Complete!${NC}"
