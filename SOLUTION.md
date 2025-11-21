@@ -3,7 +3,7 @@
 **Your Name:** Steve
 **Date:** November 21, 2025
 **LLM Provider Used:** Anthropic (Claude Sonnet 4.5)
-**Status:** ✅ Production-Ready Multi-Agent Workflow
+**Status:** ✅ Complete with Dynamic Metrics & Real-time Data
 
 ## Architecture Overview (200 words max)
 
@@ -99,6 +99,31 @@ The current sequential pipeline can process ~20-30 reports/hour with a single in
 
 6. **Network Security**: Run agents in private VPC subnets. LLM API calls use VPC endpoints to avoid internet exposure.
 
+## Recent Improvements (Latest Implementation)
+
+### Dynamic Metrics & Real-time Data
+1. **Processing Time**: Actual execution timing instead of hard-coded 3.2s
+2. **Token Estimation**: Based on report size (chars / 4) instead of fixed 4500
+3. **Data Quality Scoring**: Calculated from extraction completeness instead of fixed 0.95
+4. **Agent Success Tracking**: Determined by actual error accumulation instead of always true
+
+### Enhanced Sentiment Analysis
+- Phrase extraction from report content instead of simple keyword counting
+- Dynamic confidence calculation based on keyword ratio
+- Management tone determined from sentiment + keyword mix
+- Fallback to expected indicators if extraction yields no results
+
+### Enhanced Summary Generation
+- Dynamic headline based on sentiment and financial metrics
+- Summary text generated from actual extracted data
+- Recommendation calculated from financial metrics and sentiment
+- Confidence score combines sentiment confidence with margin metrics
+
+### Output Structure
+- `actual_output.json`: Reference file with realistic sample metrics (0.0156s processing, 888 tokens, 1.0 quality)
+- API `/analyze`: Returns live data with unique timestamps and dynamic metrics on each run
+- Both maintain identical structure but reflect actual vs. sample execution statistics
+
 ## Improvements (100 words max)
 
 ### Additional Agents
@@ -158,31 +183,6 @@ Another challenge was **state management consistency in async execution**. Pytho
    - Timeout scenarios (tested coordinator retry logic)
 
 4. **Performance Tests**: Measured single analysis latency (~3.2 seconds with real LLM), token usage (~1200 tokens per analysis).
-
-## Recent Improvements (Latest Implementation)
-
-### Dynamic Metrics & Real-time Data
-1. **Processing Time**: Actual execution timing instead of hard-coded 3.2s
-2. **Token Estimation**: Based on report size (chars / 4) instead of fixed 4500
-3. **Data Quality Scoring**: Calculated from extraction completeness instead of fixed 0.95
-4. **Agent Success Tracking**: Determined by actual error accumulation instead of always true
-
-### Enhanced Sentiment Analysis
-- Phrase extraction from report content instead of simple keyword counting
-- Dynamic confidence calculation based on keyword ratio
-- Management tone determined from sentiment + keyword mix
-- Fallback to expected indicators if extraction yields no results
-
-### Enhanced Summary Generation
-- Dynamic headline based on sentiment and financial metrics
-- Summary text generated from actual extracted data
-- Recommendation calculated from financial metrics and sentiment
-- Confidence score combines sentiment confidence with margin metrics
-
-### Output Structure
-- `actual_output.json`: Reference file with realistic sample metrics (0.0156s processing, 888 tokens, 1.0 quality)
-- API `/analyze`: Returns live data with unique timestamps and dynamic metrics on each run
-- Both maintain identical structure but reflect actual vs. sample execution statistics
 
 ## Performance Metrics
 
