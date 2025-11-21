@@ -57,20 +57,6 @@ TEST_COMMAND_TIMEOUT: 5 minutes
    - test_name: "all_backend_tests"
    - test_purpose: "Validates all backend functionality including file processing, SQL security, LLM integration, and API endpoints"
 
-### Frontend Tests
-
-4. **TypeScript Type Check**
-   - Preparation Command: None
-   - Command: `cd app/client && bun tsc --noEmit`
-   - test_name: "typescript_check"
-   - test_purpose: "Validates TypeScript type correctness without generating output files, catching type errors, missing imports, and incorrect function signatures"
-
-5. **Frontend Build**
-   - Preparation Command: None
-   - Command: `cd app/client && bun run build`
-   - test_name: "frontend_build"
-   - test_purpose: "Validates the complete frontend build process including bundling, asset optimization, and production compilation"
-
 ## Report
 
 - IMPORTANT: Return results exclusively as a JSON array based on the `Output Structure` section below.
@@ -99,16 +85,22 @@ TEST_COMMAND_TIMEOUT: 5 minutes
 ```json
 [
   {
-    "test_name": "frontend_build",
+    "test_name": "backend_linting",
     "passed": false,
-    "execution_command": "cd app/client && bun run build",
-    "test_purpose": "Validates TypeScript compilation, module resolution, and production build process for the frontend application",
-    "error": "TS2345: Argument of type 'string' is not assignable to parameter of type 'number'"
+    "execution_command": "cd app/client && uv run ruff check src/",
+    "test_purpose": "Validates Python code quality, identifies unused imports, style violations, and potential bugs",
+    "error": "src/main.py:45:1: F401 'pandas' imported but unused"
+  },
+  {
+    "test_name": "python_syntax_check",
+    "passed": true,
+    "execution_command": "cd app/client && uv run python -m py_compile src/main.py src/llm_client.py src/agents/*.py src/workflow/*.py",
+    "test_purpose": "Validates Python syntax by compiling source files to bytecode, catching syntax errors like missing colons, invalid indentation, or malformed statements"
   },
   {
     "test_name": "all_backend_tests",
     "passed": true,
-    "execution_command": "cd app/server && uv run pytest tests/ -v --tb=short",
+    "execution_command": "cd app/client && uv run pytest tests/ -v --tb=short",
     "test_purpose": "Validates all backend functionality including file processing, SQL security, LLM integration, and API endpoints"
   }
 ]

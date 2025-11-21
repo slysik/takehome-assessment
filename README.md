@@ -1,14 +1,15 @@
-# Natural Language SQL Interface
+# Multi-Agent Earnings Analyzer
 
-A web application that converts natural language queries to SQL using AI, built with FastAPI and Vite + TypeScript.
+A comprehensive multi-agent system that analyzes company earnings data using AI agents with specialized capabilities, built with FastAPI and Vite + TypeScript.
 
 ## Features
 
-- 🗣️ Natural language to SQL conversion using OpenAI or Anthropic
-- 📁 Drag-and-drop file upload (.csv and .json)
-- 📊 Interactive table results display
-- 🔒 SQL injection protection
-- ⚡ Fast development with Vite and uv
+- 🤖 Multi-agent system with specialized agents for earnings analysis
+- 📊 Natural language queries to earnings insights using OpenAI or Anthropic
+- 📁 Data import and management capabilities
+- 🔍 Deep company earnings analysis with multiple perspectives
+- 🔒 SQL injection protection and secure data handling
+- ⚡ Fast development with Vite, uv, and FastAPI
 
 ## Prerequisites
 
