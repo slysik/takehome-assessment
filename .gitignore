@@ -49,7 +49,7 @@ trees/
 logs/
 
 # Agent output directories
-agents/
+# agents/ - removed to allow src/agents/ to be tracked in version control
 
 claude-max-output.json
 claude-max-output.jsonl
