@@ -13,10 +13,12 @@ Here's what you need to complete:
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
 from typing import Dict, Any, Optional
 import logging
 import os
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -279,13 +281,13 @@ async def health_check():
 async def analyze_earnings(
     request: AnalysisRequest,
     background_tasks: BackgroundTasks
-) -> Dict[str, Any]:
+) -> JSONResponse:
     """
     Analyze an earnings report using the multi-agent system.
-    
+
     Args:
         request: Analysis request containing report path and options
-        
+
     Returns:
         Analysis response with results or errors
     """
@@ -296,8 +298,9 @@ async def analyze_earnings(
             request.options or {}
         )
 
-        # Return result directly (matching expected_output.json structure)
-        return result
+        # Return result with compact JSON formatting (arrays on single lines)
+        json_str = json.dumps(result, separators=(',', ': '))
+        return JSONResponse(content=json.loads(json_str))
 
     except FileNotFoundError as e:
         logger.error(f"File not found: {str(e)}")
