@@ -29,8 +29,16 @@ RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 # Copy installed packages from builder stage
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 
-# Copy application code
+# Add build timestamp to bust cache
+ARG BUILD_TIME=unknown
+RUN echo "Build timestamp: $BUILD_TIME" && echo "$BUILD_TIME" > /.buildtime
+LABEL build.timestamp=$BUILD_TIME
+
+# Copy application code (with explicit --chown to avoid caching issues)
 COPY --chown=appuser:appuser . /app
+
+# Verify copy was successful
+RUN ls -la /app/src/agents/sentiment.py && head -5 /app/src/agents/sentiment.py
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
