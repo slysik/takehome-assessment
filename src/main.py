@@ -218,8 +218,8 @@ async def process_earnings_report(report_path: str, options: Dict[str, Any]) -> 
             "agents_executed": list(agents.keys()),
             "financial_metrics": workflow_result.get("financial_metrics", {}),
             "segment_performance": workflow_result.get("segment_performance", {}),
-            "forward_guidance": workflow_result.get("forward_guidance", {}),
             "sentiment_analysis": workflow_result.get("sentiment_analysis", {}),
+            "forward_guidance": workflow_result.get("forward_guidance", {}),
             "capital_allocation": {
                 "share_buyback": 5.0,
                 "dividend_per_share": 0.88,
@@ -233,8 +233,7 @@ async def process_earnings_report(report_path: str, options: Dict[str, Any]) -> 
                 "llm_tokens_used": tokens_estimate,
                 "data_quality_score": round(data_quality, 2),
                 "agents_coordination_success": agents_success
-            },
-            "errors": errors
+            }
         }
 
         logger.info(f"Report processed successfully in {processing_time:.2f} seconds")
@@ -276,11 +275,11 @@ async def health_check():
     )
 
 
-@app.post("/analyze", response_model=AnalysisResponse)
+@app.post("/analyze")
 async def analyze_earnings(
     request: AnalysisRequest,
     background_tasks: BackgroundTasks
-):
+) -> Dict[str, Any]:
     """
     Analyze an earnings report using the multi-agent system.
     
@@ -296,25 +295,17 @@ async def analyze_earnings(
             request.report_path,
             request.options or {}
         )
-        
-        return AnalysisResponse(
-            analysis_id=result.get("analysis_id", "unknown"),
-            status="success",
-            data=result,
-            processing_time=result.get("processing_time_seconds")
-        )
-        
+
+        # Return result directly (matching expected_output.json structure)
+        return result
+
     except FileNotFoundError as e:
         logger.error(f"File not found: {str(e)}")
         raise HTTPException(status_code=404, detail=str(e))
-        
+
     except Exception as e:
         logger.error(f"Analysis failed: {str(e)}")
-        return AnalysisResponse(
-            analysis_id=f"error_{datetime.now().timestamp()}",
-            status="failed",
-            errors=[str(e)]
-        )
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/agents", response_model=Dict[str, Any])
