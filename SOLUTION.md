@@ -189,13 +189,22 @@ Bottleneck: LLM API latency accounts for ~90% of processing time. Caching and mo
 
 3. **Run the application**:
    ```bash
-   # Option A: Using provided script
-   cd /Users/slysik/tac/steve
-   ./scripts/start.sh
-
-   # Option B: Manual start
+   # Option A: Using Docker Compose (Recommended)
    cd app/client
-   python -m uvicorn src.main:app --host 0.0.0.0 --port 8000
+   docker-compose up --build
+
+   # Option B: Using Docker directly
+   docker build -t earnings-analyzer:latest .
+   docker run -d \
+     --name earnings-analyzer \
+     -p 8000:8000 \
+     --env-file ../.env \
+     -v $(pwd)/data:/app/data \
+     earnings-analyzer:latest
+
+   # Option C: Local Python development (without Docker)
+   cd app/client
+   python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
 4. **Test the API**:
