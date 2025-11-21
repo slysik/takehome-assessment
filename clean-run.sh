@@ -3,6 +3,8 @@
 # Multi-Agent Earnings Analyzer - Clean Run Script
 # This script demonstrates the complete solution working end-to-end
 
+export DEBIAN_FRONTEND=noninteractive
+
 set -e  # Exit on error
 
 # Colors for output
