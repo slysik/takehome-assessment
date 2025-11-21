@@ -6,8 +6,11 @@ FROM python:3.11-slim as builder
 # Set working directory
 WORKDIR /app
 
+# Suppress debconf warnings during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
@@ -22,6 +25,9 @@ FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
+
+# Suppress debconf warnings during package installation
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
