@@ -8,6 +8,10 @@ WORKDIR /app
 
 # Suppress debconf warnings during package installation
 ENV DEBIAN_FRONTEND=noninteractive
+# Suppress pip warnings about running as root
+ENV PIP_ROOT_USER_ACTION=ignore
+# Disable pip version check notice
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -28,6 +32,10 @@ WORKDIR /app
 
 # Suppress debconf warnings during package installation
 ENV DEBIAN_FRONTEND=noninteractive
+# Suppress pip warnings about running as root
+ENV PIP_ROOT_USER_ACTION=ignore
+# Disable pip version check notice
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
