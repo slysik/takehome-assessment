@@ -139,6 +139,7 @@ class WorkflowGraph:
             # Prepare summary input from previous agent outputs
             summary_input = {
                 "financial_metrics": state["financial_metrics"],
+                "segment_performance": state.get("segment_performance", {}),
                 "sentiment_analysis": state["sentiment_analysis"],
                 "metadata": state.get("metadata", {})
             }
