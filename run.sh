@@ -36,12 +36,12 @@ fi
 
 echo ""
 echo -e "${BLUE}Building Docker image...${NC}"
-# Work around buildx permission issues by disabling BuildKit
-DOCKER_BUILDKIT=0 docker build -t earnings-analyzer:latest .
+# Use BuildKit for better performance
+DOCKER_BUILDKIT=1 docker build -t earnings-analyzer:latest .
 
 echo ""
 echo -e "${BLUE}Starting Docker container...${NC}"
-DOCKER_BUILDKIT=0 docker-compose up -d
+DOCKER_BUILDKIT=1 docker-compose up -d
 
 echo ""
 echo -e "${GREEN}✓ Container started${NC}"

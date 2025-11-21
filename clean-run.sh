@@ -59,9 +59,9 @@ fi
 
 echo ""
 echo -e "${BLUE}Building Docker image...${NC}"
-# Use legacy builder to avoid BuildKit permission issues
+# Use BuildKit for better performance
 # Pass build timestamp to bust cache and ensure code updates are picked up
-export DOCKER_BUILDKIT=0
+export DOCKER_BUILDKIT=1
 BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 docker build --no-cache --build-arg BUILD_TIME="$BUILD_TIME" -t earnings-analyzer:latest .
 
