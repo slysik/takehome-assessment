@@ -1,7 +1,4 @@
-# ML Engineer - GenAI Take-Home Assignment
-
 ## Multi-Agent Research & Analysis System 
-**Submission Deadline:** 48 hours from receipt
 
 ## Welcome
 
@@ -157,5 +154,6 @@ curl -X POST http://localhost:8000/analyze \
 ## Questions?
 
 If something isn't clear, document your assumptions in `SOLUTION.md` and proceed with your best interpretation. We'd rather see how you think through ambiguity than have you stuck.
+
 
 
