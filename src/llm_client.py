@@ -6,9 +6,10 @@ from typing import Dict, Any, Optional
 import json
 
 try:
-    from anthropic import Anthropic
+    from anthropic import Anthropic, AsyncAnthropic
 except ImportError:
     Anthropic = None
+    AsyncAnthropic = None
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ class AnthropicLLMClient:
             model: Model ID to use (defaults to claude-sonnet-4-5)
             api_key: Anthropic API key (defaults to ANTHROPIC_API_KEY env var)
         """
-        if Anthropic is None:
+        if AsyncAnthropic is None:
             raise ImportError("anthropic package not installed. Install with: pip install anthropic")
 
         self.model = model
@@ -37,7 +38,7 @@ class AnthropicLLMClient:
                 "ANTHROPIC_API_KEY not provided. Set it via parameter or environment variable."
             )
 
-        self.client = Anthropic(api_key=self.api_key)
+        self.client = AsyncAnthropic(api_key=self.api_key)
         logger.info(f"Initialized Anthropic LLM client with model: {model}")
 
     async def generate(
@@ -62,7 +63,7 @@ class AnthropicLLMClient:
         try:
             messages = [{"role": "user", "content": prompt}]
 
-            response = self.client.messages.create(
+            response = await self.client.messages.create(
                 model=self.model,
                 max_tokens=max_tokens,
                 temperature=temperature,
