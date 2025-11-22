@@ -32,6 +32,7 @@ class CoordinatorAgent(BaseAgent):
         """
         super().__init__(name="coordinator")
         self.llm_client = llm_client
+        # Dictionary to store all registered agents that coordinator will manage
         self.registered_agents = {}
 
     def register_agent(self, agent_name: str, agent: BaseAgent) -> None:
@@ -76,11 +77,12 @@ class CoordinatorAgent(BaseAgent):
             AgentResult with coordination instructions
         """
         try:
-            # Extract report content
+            # Step 1: Extract report content from input
+            # First check if report content is provided directly, otherwise read from file path
             if "report_content" in input_data:
                 report_content = input_data["report_content"]
             elif "report_path" in input_data:
-                # Read report from file
+                # Read report from file path (alternative input method)
                 report_path = input_data["report_path"]
                 try:
                     with open(report_path, 'r') as f:
@@ -100,16 +102,18 @@ class CoordinatorAgent(BaseAgent):
                     errors=["No report_path or report_content provided"]
                 )
 
-            # Store report content in context for other agents
+            # Step 2: Store report content in shared context
+            # This makes the report available to all downstream agents
             context["report_content"] = report_content
             context["workflow_initiated_by"] = self.name
 
-            # Prepare workflow execution plan
+            # Step 3: Create execution plan defining order of agent execution
+            # Coordinator determines which agents will run and in what order
             execution_plan = {
                 "agents_to_execute": [
-                    "data_extractor",
-                    "sentiment_analyzer",
-                    "summary_generator"
+                    "data_extractor",  # Extract financial metrics first
+                    "sentiment_analyzer",  # Analyze tone while having context
+                    "summary_generator"  # Generate summary using outputs from above agents
                 ],
                 "report_length": len(report_content),
                 "initialized_at": context.get("timestamp", "unknown")
